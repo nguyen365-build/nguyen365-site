@@ -1,0 +1,19 @@
+{
+  // Static-assets Worker. Astro builds to ./dist and Cloudflare serves it
+  // directly - there is no server-side code, so this Worker has no "main"
+  // entrypoint, only an assets directory.
+  //
+  // A Workers project named nguyen365-site is already connected to this repo,
+  // but the build had no wrangler config to read, so it failed with nothing to
+  // deploy. This file is that config.
+  "name": "nguyen365-site",
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    "directory": "./dist",
+    // Astro emits directory-style routes (/resume/index.html), and this serves
+    // /resume and /resume/ from the same file without a redirect loop.
+    "html_handling": "auto-trailing-slash",
+    // Serve the custom 404 page rather than Cloudflare's default.
+    "not_found_handling": "404-page"
+  }
+}

@@ -1,9 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getCollection, render } from "astro:content";
+import { profile } from "../../data/profile";
 
 export async function getStaticPaths() {
-  const entries = await getCollection("case-studies");
+  // Drafts are excluded from the build entirely - an unfinished page is worse
+  // than no page for a reader who came here to judge the work.
+  const entries = (await getCollection("case-studies")).filter(
+    (entry) => entry.data.status === "published"
+  );
   return entries.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
@@ -14,10 +19,44 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<Layout title={entry.data.title} description={entry.data.summary}>
-  {entry.data.status === "draft" && <p class="tag">draft - full write-up in progress</p>}
-  <h1>{entry.data.title}</h1>
-  <p>{entry.data.summary}</p>
-  <Content />
-  <p><a href="/case-studies/">&larr; Back to Case Studies</a></p>
+<Layout title={entry.data.title} description={entry.data.summary} type="article">
+  <div class="wrap-narrow">
+    <a class="back-link" href="/case-studies/">&larr; All case studies</a>
+
+    <div class="page-head">
+      <h1>{entry.data.title}</h1>
+      <p class="lede">{entry.data.summary}</p>
+      <ul class="tag-row" style="margin-top: 1.25rem;">
+        {entry.data.tags.map((tag: string) => <li class="tag tag-muted">{tag}</li>)}
+        <li class="tag tag-muted">{entry.data.readTime} min read</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <p>
+        <strong>Clean-room write-up.</strong> This describes a pattern and the reasoning
+        behind it, drawn from production work at a credit union. It contains no employer
+        source code, configuration, vendor contract terms, or member data, and no
+        performance numbers I can't substantiate publicly.
+      </p>
+    </div>
+
+    <article class="prose">
+      <Content />
+    </article>
+
+    <section class="contact-box">
+      <h2>Questions about this one?</h2>
+      <p class="measure">
+        I'm glad to go deeper on any of this in a conversation - including the parts
+        that went badly, which are usually the more useful half.
+      </p>
+      <ul class="contact-list">
+        <li>
+          <span class="label">Email</span>
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+        </li>
+      </ul>
+    </section>
+  </div>
 </Layout>

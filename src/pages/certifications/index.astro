@@ -1,18 +1,31 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { certifications } from "../../data/certifications";
+import { certifications } from "../../data/profile";
 ---
 
 <Layout
   title="Certifications"
-  description="Certifications, led by the ones most relevant to banking and payments engineering."
+  description="Certifications held by Minh Nguyen, ordered by relevance to banking and payments engineering."
 >
-  <h1>Certifications</h1>
-  <p>Ordered by relevance to banking/payments engineering, not alphabetically.</p>
+  <div class="wrap-narrow">
+    <div class="page-head">
+      <h1>Certifications</h1>
+      <p class="lede">
+        Ordered by how much they actually bear on banking and payments work, not
+        alphabetically and not by recency.
+      </p>
+    </div>
 
-  <ul>
-    {certifications.map((cert) => (
-      <li>{cert.name}</li>
-    ))}
-  </ul>
+    <div class="card-grid">
+      {
+        certifications.map((cert) => (
+          <article class="card">
+            <h3>{cert.name}</h3>
+            <p>{cert.issuer}</p>
+            {cert.relevance && <p class="card-foot">{cert.relevance}</p>}
+          </article>
+        ))
+      }
+    </div>
+  </div>
 </Layout>

@@ -1,41 +1,49 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 
+// Deliberately kept separate from the case studies. These are practice
+// projects; presenting them as production work would undercut the pages that
+// actually are.
 const exercises = [
   {
     name: "Game Hub",
-    description: "A learning exercise built while picking up a new stack end to end.",
+    learned: "React and TypeScript end to end - routing, state, and API consumption.",
   },
   {
     name: "Movie Rental",
-    description: "A learning exercise covering data modeling and CRUD fundamentals.",
+    learned: "Relational data modelling and CRUD fundamentals on a fresh stack.",
   },
   {
     name: "Azure AI Translator",
-    description: "A learning exercise wiring up an Azure Cognitive Services integration.",
+    learned: "Wiring an Azure Cognitive Services integration, including key handling.",
   },
 ];
 ---
 
 <Layout
   title="Learning Exercises"
-  description="Practice projects, kept separate from the case studies above - these are how skills got built, not proof of production work."
+  description="Practice projects, kept deliberately separate from the production case studies."
 >
-  <h1>Learning Exercises</h1>
-  <p>
-    Kept separate from the case studies on purpose - these are practice projects,
-    not production work. Repo links are being added as each one is tidied up.
-  </p>
-
-  {exercises.map((ex) => (
-    <div class="card">
-      <h3>{ex.name}</h3>
-      <p>{ex.description}</p>
+  <div class="wrap-narrow">
+    <div class="page-head">
+      <h1>Learning exercises</h1>
+      <p class="lede">
+        These are practice projects, not production work, and they're on a separate
+        page for exactly that reason. They're here because how someone picks up an
+        unfamiliar stack is worth showing - not because they're the strongest thing
+        on this site. That's the <a href="/case-studies/">case studies</a>.
+      </p>
     </div>
-  ))}
 
-  <p>
-    See the full project list on
-    {" "}<a href="https://github.com/nguyen365-build" target="_blank" rel="noopener noreferrer">GitHub</a>.
-  </p>
+    <div class="card-grid">
+      {
+        exercises.map((ex) => (
+          <article class="card">
+            <h3>{ex.name}</h3>
+            <p>{ex.learned}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
 </Layout>

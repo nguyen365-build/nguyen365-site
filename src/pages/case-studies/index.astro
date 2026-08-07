@@ -2,25 +2,44 @@
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
-const entries = (await getCollection("case-studies")).sort((a, b) =>
-  a.data.title.localeCompare(b.data.title)
-);
+const entries = (await getCollection("case-studies"))
+  .filter((entry) => entry.data.status === "published")
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Layout
   title="Case Studies"
-  description="Case studies from real 2025-2026 banking and fintech engineering work."
+  description="Clean-room write-ups of real banking and payments engineering work: SAML SSO, Plaid ACH verification and audit trails, Fiserv wallet provisioning, and a core banking conversion."
 >
-  <h1>Case Studies</h1>
-  <p>
-    Each of these comes from real, verified work - most of it still marked
-    <span class="tag">draft</span> while the full write-up gets finished.
-  </p>
-
-  {entries.map((entry) => (
-    <div class="card">
-      <h3><a href={`/case-studies/${entry.id}/`}>{entry.data.title}</a></h3>
-      <p>{entry.data.summary}</p>
+  <div class="wrap">
+    <div class="page-head">
+      <h1>Case studies</h1>
+      <p class="lede measure">
+        Each of these comes out of production work at a credit union. They're written
+        clean-room - the pattern, the tradeoffs, and the failure modes, with no
+        employer code, data, configuration, or member information. Where a number
+        would be persuasive but I can't publish it, I've left it out rather than
+        rounded it into something vague.
+      </p>
     </div>
-  ))}
+
+    <div class="card-grid card-grid-2">
+      {
+        entries.map((entry) => (
+          <article class="card card-link">
+            <h3>
+              <a href={`/case-studies/${entry.id}/`}>{entry.data.title}</a>
+            </h3>
+            <p>{entry.data.summary}</p>
+            <ul class="tag-row">
+              {entry.data.tags.map((tag: string) => (
+                <li class="tag tag-muted">{tag}</li>
+              ))}
+            </ul>
+            <p class="card-foot">{entry.data.readTime} min read</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
 </Layout>
