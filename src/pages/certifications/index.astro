@@ -1,0 +1,18 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { certifications } from "../../data/certifications";
+---
+
+<Layout
+  title="Certifications"
+  description="Certifications, led by the ones most relevant to banking and payments engineering."
+>
+  <h1>Certifications</h1>
+  <p>Ordered by relevance to banking/payments engineering, not alphabetically.</p>
+
+  <ul>
+    {certifications.map((cert) => (
+      <li>{cert.name}</li>
+    ))}
+  </ul>
+</Layout>

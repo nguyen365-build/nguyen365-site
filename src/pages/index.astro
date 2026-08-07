@@ -1,17 +1,35 @@
 ---
-
+import Layout from "../layouts/Layout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout
+  title="nguyen365.com"
+  description="Banking, credit union, and fintech engineering - case studies, resume, and certifications."
+>
+  <p class="tag">banking / credit union / fintech engineering</p>
+  <h1>Proof, not a pitch.</h1>
+  <p>
+    I'm Minh Nguyen. In 2025 I shipped three SAML SSO integrations, built Plaid ACH
+    verification with a full compliance audit trail, stood up digital wallet and
+    card-issuance provisioning through Fiserv, and overhauled a CI/CD pipeline with
+    GitHub Actions, Playwright, and TestRail. Right now I'm mid-way through a live
+    core banking conversion off DataSafe onto Jack Henry Symitar.
+  </p>
+  <p>
+    This site is where that work gets written up in detail - not a generic
+    portfolio, but the real problems and the real fixes.
+  </p>
+
+  <div class="card">
+    <h3><a href="/case-studies/">Case Studies</a></h3>
+    <p>Four write-ups drawn directly from 2025-2026 production work.</p>
+  </div>
+  <div class="card">
+    <h3><a href="/certifications/">Certifications</a></h3>
+    <p>Led by DevOps Engineer Expert and Security/Compliance/Identity Fundamentals.</p>
+  </div>
+  <div class="card">
+    <h3><a href="/resume/">Resume &amp; Contact</a></h3>
+    <p>The short version, plus how to reach me.</p>
+  </div>
+</Layout>

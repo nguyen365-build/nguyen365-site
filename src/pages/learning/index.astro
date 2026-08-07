@@ -1,0 +1,41 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const exercises = [
+  {
+    name: "Game Hub",
+    description: "A learning exercise built while picking up a new stack end to end.",
+  },
+  {
+    name: "Movie Rental",
+    description: "A learning exercise covering data modeling and CRUD fundamentals.",
+  },
+  {
+    name: "Azure AI Translator",
+    description: "A learning exercise wiring up an Azure Cognitive Services integration.",
+  },
+];
+---
+
+<Layout
+  title="Learning Exercises"
+  description="Practice projects, kept separate from the case studies above - these are how skills got built, not proof of production work."
+>
+  <h1>Learning Exercises</h1>
+  <p>
+    Kept separate from the case studies on purpose - these are practice projects,
+    not production work. Repo links are being added as each one is tidied up.
+  </p>
+
+  {exercises.map((ex) => (
+    <div class="card">
+      <h3>{ex.name}</h3>
+      <p>{ex.description}</p>
+    </div>
+  ))}
+
+  <p>
+    See the full project list on
+    {" "}<a href="https://github.com/nguyen365-build" target="_blank" rel="noopener noreferrer">GitHub</a>.
+  </p>
+</Layout>

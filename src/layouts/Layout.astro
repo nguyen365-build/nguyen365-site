@@ -1,0 +1,61 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const pageTitle = title === "nguyen365.com" ? title : `${title} - nguyen365.com`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/case-studies/", label: "Case Studies" },
+  { href: "/learning/", label: "Learning" },
+  { href: "/certifications/", label: "Certifications" },
+  { href: "/resume/", label: "Resume" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">nguyen365.com</a>
+        <nav class="primary" aria-label="Primary">
+          {navItems.map((item) => (
+            <a href={item.href} aria-current={Astro.url.pathname === item.href ? "page" : undefined}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="wrap">
+        <slot />
+      </div>
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        &copy; {new Date().getFullYear()} - built and maintained in the open.
+      </div>
+    </footer>
+  </body>
+</html>

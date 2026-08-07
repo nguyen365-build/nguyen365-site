@@ -1,0 +1,26 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const entries = (await getCollection("case-studies")).sort((a, b) =>
+  a.data.title.localeCompare(b.data.title)
+);
+---
+
+<Layout
+  title="Case Studies"
+  description="Case studies from real 2025-2026 banking and fintech engineering work."
+>
+  <h1>Case Studies</h1>
+  <p>
+    Each of these comes from real, verified work - most of it still marked
+    <span class="tag">draft</span> while the full write-up gets finished.
+  </p>
+
+  {entries.map((entry) => (
+    <div class="card">
+      <h3><a href={`/case-studies/${entry.id}/`}>{entry.data.title}</a></h3>
+      <p>{entry.data.summary}</p>
+    </div>
+  ))}
+</Layout>
