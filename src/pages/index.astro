@@ -1,35 +1,138 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { profile, stack } from "../data/profile";
+
+const studies = (await getCollection("case-studies"))
+  .filter((entry) => entry.data.status === "published")
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Layout
   title="nguyen365.com"
-  description="Banking, credit union, and fintech engineering - case studies, resume, and certifications."
+  description="Minh Nguyen - senior .NET engineer in digital banking and payments. SAML SSO, Plaid ACH verification, Fiserv wallet provisioning, and a live core banking conversion, written up in detail."
 >
-  <p class="tag">banking / credit union / fintech engineering</p>
-  <h1>Proof, not a pitch.</h1>
-  <p>
-    I'm Minh Nguyen. In 2025 I shipped three SAML SSO integrations, built Plaid ACH
-    verification with a full compliance audit trail, stood up digital wallet and
-    card-issuance provisioning through Fiserv, and overhauled a CI/CD pipeline with
-    GitHub Actions, Playwright, and TestRail. Right now I'm mid-way through a live
-    core banking conversion off DataSafe onto Jack Henry Symitar.
-  </p>
-  <p>
-    This site is where that work gets written up in detail - not a generic
-    portfolio, but the real problems and the real fixes.
-  </p>
+  <div class="wrap">
+    <section class="hero">
+      <p class="eyebrow">Digital banking &amp; payments engineering</p>
+      <h1>I ship regulated payments software, and I write down how.</h1>
+      <p class="lede measure">
+        I'm Minh Nguyen, a senior .NET engineer at a credit union in Northern Virginia.
+        In 2025 I shipped three SAML SSO integrations, built Plaid ACH verification with
+        an audit trail an examiner can actually follow, and delivered digital wallet
+        push provisioning through Fiserv. Right now I'm mid-flight on a core banking
+        conversion off DataSafe onto Jack Henry Symitar.
+      </p>
+      <p class="lede measure">
+        The write-ups below are the parts that were genuinely hard - the failure modes,
+        the tradeoffs, and the things I'd do differently. No confidential detail, no
+        invented metrics.
+      </p>
 
-  <div class="card">
-    <h3><a href="/case-studies/">Case Studies</a></h3>
-    <p>Four write-ups drawn directly from 2025-2026 production work.</p>
-  </div>
-  <div class="card">
-    <h3><a href="/certifications/">Certifications</a></h3>
-    <p>Led by DevOps Engineer Expert and Security/Compliance/Identity Fundamentals.</p>
-  </div>
-  <div class="card">
-    <h3><a href="/resume/">Resume &amp; Contact</a></h3>
-    <p>The short version, plus how to reach me.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/case-studies/">Read the case studies</a>
+        <a class="btn btn-secondary" href="/resume/">Resume</a>
+        <a class="btn btn-secondary" href={`mailto:${profile.email}`}>Get in touch</a>
+      </div>
+    </section>
+
+    <dl class="proof">
+      <div>
+        <dt>Now</dt>
+        <dd>Core conversion: DataSafe &rarr; Jack Henry Symitar</dd>
+      </div>
+      <div>
+        <dt>Shipped 2025</dt>
+        <dd>3 SAML SSO integrations</dd>
+      </div>
+      <div>
+        <dt>Payments</dt>
+        <dd>Plaid ACH verification &amp; audit trail</dd>
+      </div>
+      <div>
+        <dt>Cards</dt>
+        <dd>Fiserv wallet push provisioning</dd>
+      </div>
+      <div>
+        <dt>Experience</dt>
+        <dd>14 years in regulated software</dd>
+      </div>
+    </dl>
+
+    <section>
+      <h2>Case studies</h2>
+      <p class="lede measure">
+        Four write-ups from real production work. Each one is clean-room: the pattern
+        and the reasoning, never an employer's code, data, or configuration.
+      </p>
+
+      <div class="card-grid card-grid-2">
+        {
+          studies.map((entry) => (
+            <article class="card card-link">
+              <h3>
+                <a href={`/case-studies/${entry.id}/`}>{entry.data.title}</a>
+              </h3>
+              <p>{entry.data.summary}</p>
+              <ul class="tag-row">
+                {entry.data.tags.slice(0, 3).map((tag: string) => (
+                  <li class="tag tag-muted">{tag}</li>
+                ))}
+              </ul>
+              <p class="card-foot">{entry.data.readTime} min read</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section>
+      <h2>What I work with</h2>
+      <p class="lede measure">
+        Systems and vendors I've worked with directly, not a list of everything
+        I've read about.
+      </p>
+      <div class="stack-grid">
+        {
+          stack.map((group) => (
+            <div>
+              <h3>{group.group}</h3>
+              <ul>
+                {group.items.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="contact-box">
+      <h2>Hiring for banking, credit union, or fintech engineering?</h2>
+      <p class="measure">
+        I'm most useful where payments, identity, and compliance meet real delivery
+        pressure - the work where "it passes tests" and "it survives an audit" have
+        to both be true. Happy to talk through any of the case studies in detail.
+      </p>
+      <ul class="contact-list">
+        <li>
+          <span class="label">Email</span>
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+        </li>
+        <li>
+          <span class="label">LinkedIn</span>
+          <a href={profile.linkedin} rel="noopener" target="_blank">linkedin.com/in/nguyen365</a>
+        </li>
+        <li>
+          <span class="label">GitHub</span>
+          <a href={profile.github} rel="noopener" target="_blank">github.com/nguyen365-build</a>
+        </li>
+        <li>
+          <span class="label">Based in</span>
+          {profile.location} - open to remote and DC-metro roles
+        </li>
+      </ul>
+    </section>
   </div>
 </Layout>

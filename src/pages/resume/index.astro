@@ -1,29 +1,127 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { profile, roles, certifications, education, stack } from "../../data/profile";
 ---
 
 <Layout
-  title="Resume & Contact"
-  description="Resume summary and how to get in touch."
+  title="Resume"
+  description="Minh Nguyen - senior .NET engineer in digital banking and payments. Full work history, stack, certifications, and contact details."
 >
-  <h1>Resume &amp; Contact</h1>
-  <p class="tag">downloadable PDF in progress - see career-relaunch issue #17</p>
+  <div class="wrap-narrow">
+    <div class="page-head">
+      <h1>{profile.fullName}</h1>
+      <p class="lede">{profile.headline}</p>
+      <p class="mono" style="font-size: 0.85rem; color: var(--ink-faint);">
+        {profile.location} &middot;
+        <a href={`mailto:${profile.email}`}>{profile.email}</a> &middot;
+        <a href={profile.linkedin} rel="noopener" target="_blank">linkedin.com/in/nguyen365</a> &middot;
+        <a href={profile.github} rel="noopener" target="_blank">github.com/nguyen365-build</a>
+      </p>
+      <div class="hero-actions no-print">
+        <a class="btn btn-secondary" href={`mailto:${profile.email}`}>Email me</a>
+        <a class="btn btn-secondary" href="/case-studies/">Case studies</a>
+      </div>
+    </div>
 
-  <h2>Summary</h2>
-  <p>
-    Banking/credit union engineering, currently at Congressional Federal Credit
-    Union. 2025 shipped work: three SAML SSO integrations (TruStage,
-    MeridianLink), Plaid ACH verification with a compliance audit trail, Fiserv
-    digital wallet and card-issuance push provisioning, and a CI/CD overhaul
-    (GitHub Actions, Playwright, TestRail, feature-flag deployments). Technical
-    lead over an external vendor team (ClaySys). Hands-on with Fortanix and
-    Cenlar. Currently leading a live core banking conversion off DataSafe onto
-    Jack Henry Symitar.
-  </p>
+    <h2>Summary</h2>
+    <p>
+      Senior .NET engineer with 14 years building software under real regulatory
+      constraint - first across four Saskatchewan government ministries, now in
+      digital banking at a credit union. My recent work is squarely in payments and
+      identity: three SAML 2.0 SSO integrations, Plaid ACH account verification with
+      a compliance audit trail, and digital wallet push provisioning through Fiserv.
+      I currently lead a live core banking conversion from DataSafe onto Jack Henry
+      Symitar, and I've been technical lead over an external vendor engineering team.
+    </p>
 
-  <h2>Get in touch</h2>
-  <p>
-    Best starting point is
-    {" "}<a href="https://github.com/nguyen365-build" target="_blank" rel="noopener noreferrer">GitHub</a>.
-  </p>
+    <h2>Experience</h2>
+    {
+      roles.map((role) => (
+        <section class="role">
+          <div class="role-head">
+            <h3>{role.title}</h3>
+            <span class="role-dates">
+              {role.start} &ndash; {role.end}
+            </span>
+          </div>
+          <p class="role-company">
+            {role.company} &middot; {role.location}
+            {role.link && (
+              <>
+                {" "}&middot;{" "}
+                <a href={role.link.href} rel="noopener" target="_blank">
+                  {role.link.label}
+                </a>
+              </>
+            )}
+          </p>
+          <ul>
+            {role.points.map((point) => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <h2>Technical</h2>
+    <div class="stack-grid">
+      {
+        stack.map((group) => (
+          <div>
+            <h3>{group.group}</h3>
+            <ul>
+              {group.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <h2>Certifications</h2>
+    <ul>
+      {
+        certifications.map((cert) => (
+          <li>
+            {cert.name} <span style="color: var(--ink-faint);">&middot; {cert.issuer}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <h2>Education</h2>
+    {
+      education.map((item) => (
+        <section class="role">
+          <div class="role-head">
+            <h3>{item.credential}</h3>
+            <span class="role-dates">{item.dates}</span>
+          </div>
+          <p class="role-company">
+            {item.school} &middot; {item.field}
+          </p>
+        </section>
+      ))
+    }
+
+    <section class="contact-box no-print">
+      <h2>Contact</h2>
+      <p class="measure">
+        The fastest way to reach me is email. This page is print-ready - use your
+        browser's print-to-PDF if you need a file copy.
+      </p>
+      <ul class="contact-list">
+        <li>
+          <span class="label">Email</span>
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+        </li>
+        <li>
+          <span class="label">LinkedIn</span>
+          <a href={profile.linkedin} rel="noopener" target="_blank">linkedin.com/in/nguyen365</a>
+        </li>
+      </ul>
+    </section>
+  </div>
 </Layout>

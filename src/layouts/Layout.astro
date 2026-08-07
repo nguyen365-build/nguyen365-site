@@ -1,21 +1,60 @@
 ---
 import "../styles/global.css";
+import { profile } from "../data/profile";
 
 interface Props {
   title: string;
   description: string;
+  /** Set on long-form pages so search engines see them as articles. */
+  type?: "website" | "article";
 }
 
-const { title, description } = Astro.props;
-const pageTitle = title === "nguyen365.com" ? title : `${title} - nguyen365.com`;
+const { title, description, type = "website" } = Astro.props;
+
+const pageTitle =
+  title === "nguyen365.com" ? `${profile.name} - ${profile.headline}` : `${title} - ${profile.name}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
+
 const navItems = [
   { href: "/", label: "Home" },
   { href: "/case-studies/", label: "Case Studies" },
-  { href: "/learning/", label: "Learning" },
-  { href: "/certifications/", label: "Certifications" },
   { href: "/resume/", label: "Resume" },
+  { href: "/certifications/", label: "Certifications" },
+  { href: "/learning/", label: "Learning" },
 ];
+
+// Person schema so a recruiter's tooling (and search) reads the profile
+// correctly rather than guessing from page text.
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.fullName,
+  alternateName: profile.name,
+  url: profile.site,
+  email: `mailto:${profile.email}`,
+  jobTitle: "Senior Software Developer",
+  description: profile.headline,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Oakton",
+    addressRegion: "VA",
+    addressCountry: "US",
+  },
+  worksFor: {
+    "@type": "Organization",
+    name: "Congressional Federal Credit Union",
+  },
+  sameAs: [profile.linkedin, profile.github],
+  knowsAbout: [
+    "Digital banking",
+    "Payments engineering",
+    "SAML 2.0 single sign-on",
+    "ACH and NACHA",
+    "Core banking conversion",
+    "CI/CD",
+  ],
+};
 ---
 
 <!doctype html>
@@ -24,37 +63,64 @@ const navItems = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="canonical" href={canonicalURL} />
+
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta name="author" content={profile.fullName} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="nguyen365.com" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${profile.name} - ${profile.headline}`} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <meta name="generator" content={Astro.generator} />
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href="/">nguyen365.com</a>
         <nav class="primary" aria-label="Primary">
-          {navItems.map((item) => (
-            <a href={item.href} aria-current={Astro.url.pathname === item.href ? "page" : undefined}>
-              {item.label}
-            </a>
-          ))}
+          {
+            navItems.map((item) => (
+              <a
+                href={item.href}
+                aria-current={Astro.url.pathname === item.href ? "page" : undefined}
+              >
+                {item.label}
+              </a>
+            ))
+          }
         </nav>
       </div>
     </header>
-    <main>
-      <div class="wrap">
-        <slot />
-      </div>
+
+    <main id="main">
+      <slot />
     </main>
+
     <footer class="site-footer">
       <div class="wrap">
-        &copy; {new Date().getFullYear()} - built and maintained in the open.
+        <span>&copy; {new Date().getFullYear()} {profile.fullName}</span>
+        <span class="footer-links">
+          <a href={`mailto:${profile.email}`}>{profile.email}</a>
+          <a href={profile.linkedin} rel="me noopener" target="_blank">LinkedIn</a>
+          <a href={profile.github} rel="me noopener" target="_blank">GitHub</a>
+        </span>
       </div>
     </footer>
   </body>
